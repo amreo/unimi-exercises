@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 func main() {
@@ -16,32 +17,14 @@ func main() {
 	//Eventuale inversion di dei valori che devono rispettare la proprietà:
 	// Ax < Bx, Ay < By
 	//Può essere fatta dopo
-	if AAx > ABx {
-		temp := AAx
-		AAx = ABx
-		ABx = temp
-	}
-	if AAy > ABy {
-		temp := AAy
-		AAy = ABy
-		ABy = temp
-	}
-	if BAx > BBx {
-		temp := BAx
-		BAx = BBx
-		BBx = temp
-	}
-	if BAy > BBy {
-		temp := BAy
-		BAy = BBy
-		BBy = temp
-	}
+	AAx, ABx = math.Min(AAx, ABx), math.Max(AAx, ABx)
+	AAy, ABy = math.Min(AAy, ABy), math.Max(AAy, ABy)
+	BAx, BBx = math.Min(BAx, BBx), math.Max(BAx, BBx)
+	BAy, BBy = math.Min(BAy, BBy), math.Max(BAy, BBy)
 
 	//Calcolo basi, altezze
-	baseA := (ABx - AAx)
-	altezzaA := (ABy - AAy)
-	baseB := (BBx - BAx)
-	altezzaB := (BBy - BAy)
+	baseA, altezzaA := (ABx - AAx), (ABy - AAy)
+	baseB, altezzaB := (BBx - BAx), (BBy - BAy)
 
 	//Calcolo aree
 	areaA := baseA * altezzaA
@@ -57,38 +40,19 @@ func main() {
 	}
 
 	//Println di debug
-	fmt.Println("AAx=", AAx, " AAy=", AAy, " ABx=", ABx, " ABy=", ABy, "BAx=", BAx, " BAy=", BAy, " BBx=", BBx, " BBy=", BBy)
+	//fmt.Println("AAx=", AAx, " AAy=", AAy, " ABx=", ABx, " ABy=", ABy, "BAx=", BAx, " BAy=", BAy, " BBx=", BBx, " BBy=", BBy)
 
 	//Verifica la non sovrapposizione rettangoli
 	if ABx <= BAx || BBx <= AAx || ABy <= BAy || BBy <= AAy {
 		fmt.Println("I rettangoli non si sovrappongono")
 	} else {
 		fmt.Println("Un rettangolo sovrappone completamente l'altro oppure coincidono")
-		//Calcolo vertici della intersezione
-		var verAx, verAy, verBx, verBy float64
 
-		//Qui converrebbe usare la funzione math.min
-		if AAx > BAx {
-			verAx = AAx
-		} else {
-			verAx = BAx
-		}
-		if AAy > BAy {
-			verAy = AAy
-		} else {
-			verAy = BAy
-		}
-		if ABx < BBx {
-			verBx = ABx
-		} else {
-			verBx = BBx
-		}
-		if ABy < BBy {
-			verBy = ABy
-		} else {
-			verBy = BBy
-		}
-		fmt.Println("verAx=", verAx, " verAy=", verAy, "verBx=", verBx, " verBy=", verBy)
+		//Calcolo estremi del rettangolo intersezione
+		verAx, verAy := math.Max(AAx, BAx), math.Max(AAy, BAy)
+		verBx, verBy := math.Min(ABx, BBx), math.Min(ABy, BBy)
+
+		//fmt.Println("verAx=", verAx, " verAy=", verAy, "verBx=", verBx, " verBy=", verBy)
 		areaSovrapposizione := (verBx - verAx) * (verBy - verAy)
 		fmt.Println("Area di sovrapposizone: ", areaSovrapposizione)
 	}
