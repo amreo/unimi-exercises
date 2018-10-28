@@ -26,8 +26,7 @@ func main() {
 
 	//Tutte le potenze minori di 2 < n
 	fmt.Println("Potenze di 2 fino a <n")
-	//Si puo usare int(math.pow(2, i)) che 1 << i
-	for i := uint(0); (1 << i) <= n; i++ {
-		fmt.Println(1 << i)
+	for i, p := 1, 1; p <= n; i, p = i+1, p*2 {
+		fmt.Println(p)
 	}
 }
