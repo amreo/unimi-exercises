@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"strings"
+	"strconv"
 )
 
 //Struc che contiene una data
@@ -13,18 +15,34 @@ type data struct {
 
 func main() {
 	//Inserimento date
-	data1 := inputData("Inserire data1: ")
-	data2 := inputData("Inserire data2: ")
-
+	data1,ok := inputData("Inserire data1(dd-mm-yyyy): ")
+	data2,ok := inputData("Inserire data2(dd-mm-yyyy): ")
+	if(!ok) {
+		fmt.Println("Inserisci dati corretti")
+		return
+	}
 	//Scrive sullo stdout la distanza delle date
 	fmt.Println("Distanza giorni: ", calcolaDistanza(data1, data2))
 }
 
 ///Funzione che restituisce la data immessa dall'utente.
 //msg: messaggio da dire all'utente prima della immmissione della data
-func inputData(msg string) (d data) {
+func inputData(msg string) (d data,ok bool) {
 	fmt.Print(msg)
-	fmt.Scan(&d.dd, &d.mm, &d.yyyy)
+	var in string
+	fmt.Scan(&in)
+	s := strings.Split(in,"-") //taglia la stringa divisa da "-" in sottostringhe
+	if(len(s) != 3) {
+		return
+	}
+	//assegno ciascuna sottostringa al relativo valore della struttura data
+	var err,err2,err3 interface {}
+	d.dd, err = strconv.Atoi(s[0])
+	d.mm, err2 = strconv.Atoi(s[1])
+	d.yyyy, err3 = strconv.Atoi(s[2])
+	if(err == nil && err2 == nil && err3 == nil) {
+		ok = true;
+	}
 	//Sistema il valore del giorno e del mese. L'utente ragiona i giorni in termini di [1; 31], noi [0; 30]
 	//Stessa cosa con i mesi
 	d.dd--
@@ -74,20 +92,31 @@ func calcolaDistanzaRaw(data1 data, data2 data) int {
 	//L'algoritmo è abbastanza naïve/stupido. Continua a spostare la data1 finche raggiunge data2
 	//Il ciclo si può implementare con un for terario ma esce con le tre parti un pochino illeggibili
 	data := data1 //Il cursore che tiene traccia della data corrente
-	i := 0        //Numero di giorni passati
-	for compare(data, data2) < 0 {
-		//Avanza la data di un giorno
-		data = nextData(data)
-		//Incrementa il numero di giorni passati
-		i++
+	g := 0
+	for ; data.yyyy < data2.yyyy; data.yyyy++ {
+		if(isBisestile(data.yyyy)) {
+			g += 366
+			continue;
+		}
+		g += 365
+	}
+	var m int
+	for ; data.mm < data2.mm; data.mm++ {
+		m = ultimoGiorniMese(data.mm,data.yyyy)
+		g+= m
+	}
+	if(data.dd < data2.dd) {
+		g += data2.dd - data.dd
+	} else {
+		g += m - data.dd + data2.dd
 	}
 
 	//Restituisce il numero di giorni
-	return i
+	return g
 }
 
 //Funzione che restituisce la data successiva a data
-func nextData(data data) data {
+func addDay(data data) data {
 	//Avanza di un giorno
 	data.dd++
 	//Verifica che ha superato l'ultimo giorno del mese
