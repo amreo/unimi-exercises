@@ -82,19 +82,26 @@ func calcolaDistanzaRaw(data1 data, data2 data) int {
 	//L'algoritmo è abbastanza naïve/stupido. Continua a spostare la data1 finche raggiunge data2
 	//Il ciclo si può implementare con un for terario ma esce con le tre parti un pochino illeggibili
 	data := data1 //Il cursore che tiene traccia della data corrente
-	g := 0
+	g := 0        //Traccia il numero di giorni
+
+	//Sposta il cursore di anno in anno e aggiorna il numero di giorni
 	for ; data.yyyy < data2.yyyy; data.yyyy++ {
+		//Verifica anno bisestile
 		if isBisestile(data.yyyy) {
 			g += 366
-			continue
+		} else {
+			g += 365
 		}
-		g += 365
 	}
+
+	//Sposta il cursore mese in mese
 	var m int
 	for ; data.mm < data2.mm; data.mm++ {
 		m = ultimoGiorniMese(data.mm, data.yyyy) + 1
 		g += m
 	}
+
+	//Aggiunge i restanti giorni
 	if data.dd < data2.dd {
 		g += data2.dd - data.dd
 	} else {
