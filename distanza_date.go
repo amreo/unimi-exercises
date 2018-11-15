@@ -92,7 +92,7 @@ func calcolaDistanzaRaw(data1 data, data2 data) int {
 	}
 	var m int
 	for ; data.mm < data2.mm; data.mm++ {
-		m = ultimoGiorniMese(data.mm, data.yyyy)
+		m = ultimoGiorniMese(data.mm, data.yyyy) + 1
 		g += m
 	}
 	if data.dd < data2.dd {
