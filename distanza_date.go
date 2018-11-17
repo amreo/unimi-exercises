@@ -93,21 +93,24 @@ func calcolaDistanzaRaw(data1 data, data2 data) int {
 			g += 365
 		}
 	}
-
-	//Sposta il cursore mese in mese
-	var m int
-	for ; data.mm < data2.mm; data.mm++ {
-		m = ultimoGiorniMese(data.mm, data.yyyy) + 1
-		g += m
+	//Sposta mese in mese in avanti se data.mm < data2.mm
+	if data.mm < data2.mm {
+		for ; data.mm < data2.mm; data.mm++ {
+			g += ultimoGiorniMese(data.mm, data.yyyy) + 1
+		}
+	} else {
+		//Altrimenti va a ritroso
+		for ; data.mm > data2.mm; data.mm-- {
+			g -= ultimoGiorniMese(data.mm, data.yyyy) + 1
+		}
 	}
 
-	//Aggiunge i restanti giorni
+	//Sposta giorni in avanti
 	if data.dd < data2.dd {
 		g += data2.dd - data.dd
 	} else {
-		g += m - data.dd + data2.dd
+		g += -data.dd + data2.dd
 	}
-
 	//Restituisce il numero di giorni
 	return g
 }
