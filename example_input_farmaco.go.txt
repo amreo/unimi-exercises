@@ -1,0 +1,23 @@
+rossina 10
+verdina 20
+acqua 1000
+bluina 2
+FINE 0
+rossi mario
+    rossina 1
+    rossina 3
+    acqua 200
+    bluina 1
+    acqua 600
+    FINE 0
+verde giuseppe
+    rossina 9
+    rossina 3
+    acqua 200
+    bluina 8
+    acqua 600
+    FINE 0
+blu satoshi
+    verdina 100
+    FINE 0
+FINE FINE
