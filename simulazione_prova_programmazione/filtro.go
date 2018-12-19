@@ -5,6 +5,8 @@ import (
 )
 
 //MAPPA costante (più o meno) che mappa i voti alle loro rispettive fascia
+//Si può implementare una versione leggermente più efficiente con una stringa piuttosto con una runa,
+//dove ogni lettera nella stringa è indicizzata da un voto.
 var FASCIA_DI_VALORI map[int]rune = map[int]rune{
 	18: 'D', 19: 'D', 20: 'D', 21: 'D',
 	22: 'C', 23: 'C', 24: 'C',
